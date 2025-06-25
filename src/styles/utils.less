@@ -1,0 +1,191 @@
+// #region 样式配置
+
+/**
+ * 注意：
+ * 需与 @/common/theme.ts 中的 样式配置 保持一致。
+ */
+
+/** antd 变量前缀 */
+@antPrefixVar: ant;
+/** antd 类名前缀 */
+@antPrefixClass: ant;
+/** antd 图标前缀 */
+@antPrefixIcon: anticon;
+/** 遗留的 antd 类名前缀 */
+@ant-prefix: @antPrefixClass;
+
+/** 业务布局 z-index */
+@bizLayoutZIndex: 100;
+/** 业务布局顶部栏高度 */
+@bizLayoutHeader: 48px;
+/** 业务布局标题栏高度 */
+@bizLayoutTitle: 42px;
+/** 业务布局边距 */
+@bizLayoutGap: 12px;
+/** 业务布局圆角 */
+@bizLayoutRadius: 8px;
+
+// #endregion
+
+// #region 辅助函数
+
+/** 清除浮动 */
+.clear() {
+  zoom: 1;
+  &:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+  }
+}
+
+/** 单行超出截断 */
+.ellipsis() {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/** 多行超出截断 */
+.lineEllipsis(@line) {
+  overflow: hidden;
+  word-break: break-all;
+  display: -webkit-inline-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: @line;
+}
+
+// #endregion
+
+// #region 基础全局样式
+
+/**
+ * 注意：
+ * antd 样式变量仅在 .ant-app 内部生效。
+ * 需与 @/common/theme.ts 中 colorBgLayout 保持一致。
+ */
+
+/** 基础背景色 */
+@basicBgColor: #eff2f7;
+/** 基础背景色(深色主题) */
+@basicBgColorDark: #000000;
+
+/** 基础主题覆盖 */
+.basicThemeOverride() {
+  [data-theme="light"] {
+    color-scheme: light;
+    background-color: @basicBgColor;
+  }
+
+  [data-theme="dark"] {
+    color-scheme: dark;
+    background-color: @basicBgColorDark;
+  }
+}
+
+/** 基础元素覆盖 */
+.basicElementOverride() {
+  html {
+    background-color: @basicBgColor;
+  }
+
+  html,
+  body {
+    margin: 0px;
+    padding: 0px;
+    overscroll-behavior: none;
+  }
+}
+
+/** 基础全局覆盖 */
+.basicGlobalOverride() {
+  .basicThemeOverride();
+  .basicElementOverride();
+}
+
+// #endregion
+
+// #region 自定义滚动条
+
+/** 滚动条滑块颜色 */
+@scrollbarThumb: #c7c7c7;
+/** 滚动条滑块颜色(深色主题) */
+@scrollbarThumbDark: #6b6b6b;
+/** 滚动条轨道颜色 */
+@scrollbarTrack: transparent;
+
+/** 现代的滚动条 */
+.scrollbarModern(@thumb: @scrollbarThumb, @track: @scrollbarTrack) {
+  scrollbar-width: thin;
+  scrollbar-color: @thumb @track;
+}
+
+/** 遗留的滚动条 */
+.scrollbarLegacy(@thumb: @scrollbarThumb, @track: @scrollbarTrack) {
+  &::-webkit-scrollbar {
+    background-color: @track;
+  }
+  &::-webkit-scrollbar-thumb {
+    border: 4px solid transparent;
+    border-radius: 10px;
+    background-color: @thumb;
+    background-clip: content-box;
+  }
+}
+
+/** 兼容的滚动条 */
+.scrollbarCompatible(@thumb: @scrollbarThumb, @track: @scrollbarTrack) {
+  @supports (scrollbar-width: thin) {
+    .scrollbarModern(@thumb, @track);
+  }
+  @supports not (scrollbar-width: thin) {
+    .scrollbarLegacy(@thumb, @track);
+  }
+}
+
+/** 兼容的 :hover 滚动条 */
+.scrollbarCompatibleHover(@thumb: @scrollbarThumb, @track: @scrollbarTrack) {
+  @supports (scrollbar-width: thin) {
+    .scrollbarModern(transparent, transparent);
+    &:hover {
+      .scrollbarModern(@thumb, @track);
+    }
+  }
+  @supports not (scrollbar-width: thin) {
+    .scrollbarLegacy(transparent, transparent);
+    &:hover {
+      .scrollbarLegacy(@thumb, @track);
+    }
+  }
+}
+
+/** 匹配 * 的滚动条 */
+.scrollbarStarSelector() {
+  * {
+    .scrollbarCompatible(@scrollbarThumb, @scrollbarTrack);
+  }
+
+  [data-theme="dark"] {
+    * {
+      .scrollbarCompatible(@scrollbarThumbDark, @scrollbarTrack);
+    }
+  }
+}
+
+/** 匹配 *:hover 的滚动条 */
+.scrollbarStarSelectorHover () {
+  * {
+    .scrollbarCompatibleHover(@scrollbarThumb, @scrollbarTrack);
+  }
+
+  [data-theme="dark"] {
+    * {
+      .scrollbarCompatibleHover(@scrollbarThumbDark, @scrollbarTrack);
+    }
+  }
+}
+
+// #endregion

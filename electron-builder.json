@@ -1,0 +1,19 @@
+{
+  "appId": "com.think.moss.launcher",
+  "productName": "ThinkMoss Launcher",
+  "directories": {
+    "output": "out"
+  },
+  "files": ["dist/**/*"],
+  "extraResources": [".local-browsers/**/*"],
+  "artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
+  "publish": null,
+  "mac": {
+    "icon": "assets/icons/icon.icns",
+    "target": ["dmg"]
+  },
+  "win": {
+    "icon": "assets/icons/icon.ico",
+    "target": ["nsis"]
+  }
+}

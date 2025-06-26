@@ -9,11 +9,11 @@
   "artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
   "publish": null,
   "mac": {
-    "icon": "assets/icons/icon.icns",
+    "icon": "assets/icons/mac.png",
     "target": ["dmg"]
   },
   "win": {
-    "icon": "assets/icons/icon.ico",
+    "icon": "assets/icons/win.png",
     "target": ["nsis"]
   }
 }

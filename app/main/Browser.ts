@@ -66,7 +66,7 @@ class Browser {
       args.push("--browser-headed");
     }
 
-    this.logs.debug(`${cliPath} ${args.join(" ")}`);
+    // this.logs.debug(`${cliPath} ${args.join(" ")}`);
 
     return new Promise<void>((resolve, reject) => {
       try {

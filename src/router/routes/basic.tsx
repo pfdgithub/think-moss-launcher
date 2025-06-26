@@ -1,8 +1,8 @@
 import { Result } from "antd";
 import { Navigate } from "react-router-dom";
-import Forbidden from "../../views/Basic/Forbidden";
-import NotFound from "../../views/Basic/NotFound";
-import Layout from "../../views/Layout";
+import Forbidden from "@/views/Basic/Forbidden";
+import NotFound from "@/views/Basic/NotFound";
+import Layout from "@/views/Layout";
 import { ExtendRoute, ExtendRouteMeta } from "../utils";
 import { bizRoutes } from "./biz";
 

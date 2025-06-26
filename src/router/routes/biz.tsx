@@ -1,6 +1,6 @@
-import Control from "../../views/Control";
-import Logs from "../../views/Logs";
-import Settings from "../../views/Settings";
+import Control from "@/views/Control";
+import Logs from "@/views/Logs";
+import Settings from "@/views/Settings";
 import { ExtendRoute, ExtendRouteMeta } from "../utils";
 
 /**

@@ -7,11 +7,11 @@
   "scripts": {
     "serve": "concurrently -n web,app,electron -c auto --kill-others-on-fail \"npm run serve:web\" \"npm run serve:app\" \"npm run serve:electron\"",
     "serve:web": "vite --port 9527 --strictPort",
-    "serve:app": "tsc --watch --preserveWatchOutput -p tsconfig.app.json --noEmit false --declaration false --outDir dist/app",
-    "serve:electron": "nodemon -w dist/app -x \"cross-env NODE_ENV=development electron .\"",
+    "serve:app": "tsc --watch --preserveWatchOutput -p app/tsconfig.json --noEmit false --declaration false --outDir dist/app",
+    "serve:electron": "wait-on dist/app && nodemon -w dist/app -x \"cross-env NODE_ENV=development electron .\"",
     "build": "npm run build:web && npm run build:app && npm run build:electron",
     "build:web": "tsc && vite build --outDir dist/web",
-    "build:app": "tsc -p tsconfig.app.json --noEmit false --declaration false --outDir dist/app",
+    "build:app": "tsc -p app/tsconfig.json --noEmit false --declaration false --outDir dist/app",
     "build:electron": "electron-builder",
     "prepare": "husky || true",
     "postinstall": "electron-builder install-app-deps"
@@ -41,7 +41,7 @@
     "classnames": "^2.5.1",
     "concurrently": "^9.2.0",
     "cross-env": "^7.0.3",
-    "electron": "37.1.0",
+    "electron": "^37.1.0",
     "electron-builder": "^26.0.12",
     "eslint": "^9.29.0",
     "eslint-config-prettier": "^10.1.5",
@@ -59,9 +59,10 @@
     "react-dom": "^19.1.0",
     "react-router": "^7.6.2",
     "react-router-dom": "^7.6.2",
-    "typescript": "~5.8.3",
+    "typescript": "^5.8.3",
     "typescript-eslint": "^8.35.0",
     "vite": "^7.0.0",
-    "vite-plugin-checker": "^0.9.3"
+    "vite-plugin-checker": "^0.9.3",
+    "wait-on": "^8.0.3"
   }
 }

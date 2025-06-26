@@ -2,7 +2,7 @@ import { Button, Form, Input, message, Modal, Switch, Typography } from "antd";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeftOutlined, SaveOutlined } from "@ant-design/icons";
-import { MossConfig } from "../../types";
+import { MossConfig } from "@/types";
 import stl from "./index.module.less";
 
 const { Title } = Typography;

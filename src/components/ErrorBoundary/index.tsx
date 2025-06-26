@@ -1,7 +1,7 @@
 import { Button, Result, ResultProps, Space } from "antd";
 import cls, { Argument } from "classnames";
 import React from "react";
-import logger from "../../utils/logger";
+import logger from "@/utils/logger";
 import stl from "./index.module.less";
 import RouteError from "./RouteError";
 

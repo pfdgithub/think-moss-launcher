@@ -1,8 +1,10 @@
 {
-  "include": ["src"],
+  "exclude": ["dist"],
   "compilerOptions": {
-    "rootDir": "src",
     "baseUrl": "src",
+    "paths": {
+      "@/*": ["./*"]
+    },
 
     "target": "esnext",
     "lib": ["ESNext", "DOM", "DOM.Iterable"],

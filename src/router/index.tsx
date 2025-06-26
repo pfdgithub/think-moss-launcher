@@ -1,5 +1,5 @@
 import { createHashRouter, RouteObject } from "react-router";
-import ErrorBoundary from "../components/ErrorBoundary";
+import ErrorBoundary from "@/components/ErrorBoundary";
 import { rootRoute } from "./routes/basic";
 import { ExtendRoute } from "./utils";
 

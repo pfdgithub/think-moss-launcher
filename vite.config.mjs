@@ -1,10 +1,14 @@
 import cProcess from "child_process";
+import path from "path";
 import process from "process";
+import url from "url";
 import { defineConfig } from "vite";
 import checker from "vite-plugin-checker";
 import svgr from "@svgr/rollup";
 import react from "@vitejs/plugin-react";
 import pkg from "./package.json";
+
+const srcPath = url.fileURLToPath(new URL("src", import.meta.url));
 
 export default defineConfig(() => {
   const date = new Date().toISOString();
@@ -21,25 +25,31 @@ export default defineConfig(() => {
   return {
     base: "./",
     clearScreen: false,
+    resolve: {
+      alias: {
+        "@": path.join(srcPath),
+      },
+    },
     plugins: [
       react(),
       checker({
         typescript: true,
         eslint: {
           useFlatConfig: true,
-          lintCommand: "eslint \"./src/**/*.{ts,tsx,js,jsx}\"",
+          lintCommand: 'eslint "./src/**/*.{ts,tsx,js,jsx}"',
         },
         overlay: {
           initialIsOpen: false,
         },
       }),
       svgr({
+        exportType: "named",
         ref: true,
         memo: true,
         icon: true,
         svgProps: {
-          focusable: "false",
-          "aria-hidden": "true",
+          focusable: false,
+          "aria-hidden": true,
           fill: "currentColor",
         },
       }),

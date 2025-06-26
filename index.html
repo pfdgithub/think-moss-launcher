@@ -31,6 +31,20 @@
         animation: app-skeleton-keyframes 1s linear infinite;
       }
     </style>
+    <script>
+      window.THINK_GLOBAL_CONFIG = {
+        APP_NAME: "%VITE_APP_NAME%",
+        APP_VERSION: "%VITE_APP_VERSION%",
+        BUILD_DATE: "%VITE_BUILD_DATE%",
+        BUILD_COMMIT: "%VITE_BUILD_COMMIT%",
+      };
+
+      if (console.table) {
+        console.table(window.THINK_GLOBAL_CONFIG);
+      } else {
+        console.log("THINK_GLOBAL_CONFIG", window.THINK_GLOBAL_CONFIG);
+      }
+    </script>
   </head>
   <body>
     <div id="app">

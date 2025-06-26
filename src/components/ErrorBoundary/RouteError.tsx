@@ -2,7 +2,7 @@ import { Button, Result, ResultProps, Space } from "antd";
 import cls, { Argument } from "classnames";
 import { useEffect, useMemo } from "react";
 import { useRouteError } from "react-router-dom";
-import logger from "../../utils/logger";
+import logger from "@/utils/logger";
 import stl from "./index.module.less";
 
 export type RouteErrorProps = ResultProps & {

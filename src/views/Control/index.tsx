@@ -7,7 +7,7 @@ import {
   PlayCircleOutlined,
   SettingOutlined,
 } from "@ant-design/icons";
-import { AppStatus } from "../../types";
+import { AppStatus } from "@/types";
 import stl from "./index.module.less";
 
 const { Title, Text } = Typography;

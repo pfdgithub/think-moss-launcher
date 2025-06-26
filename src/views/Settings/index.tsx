@@ -1,31 +1,11 @@
-import {
-  Button,
-  Form,
-  Input,
-  message,
-  Modal,
-  Select,
-  Switch,
-  Typography,
-} from "antd";
+import { Button, Form, Input, message, Modal, Switch, Typography } from "antd";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  ArrowLeftOutlined,
-  FolderOpenOutlined,
-  SaveOutlined,
-} from "@ant-design/icons";
+import { ArrowLeftOutlined, SaveOutlined } from "@ant-design/icons";
+import { MossConfig } from "../../types";
 import stl from "./index.module.less";
 
 const { Title } = Typography;
-
-type MossConfig = {
-  apiBase?: string;
-  connectCode?: string;
-  logDir?: string;
-  logLevel?: "debug" | "info" | "warn" | "error";
-  browserHeaded?: boolean;
-};
 
 const Settings = () => {
   const navigate = useNavigate();
@@ -85,12 +65,12 @@ const Settings = () => {
     }
   };
 
-  const handleSelectDirectory = async () => {
-    const directory = await window.electronAPI?.selectDirectory?.();
-    if (directory) {
-      form.setFieldValue("logDir", directory);
-    }
-  };
+  // const handleSelectDirectory = async () => {
+  //   const directory = await window.electronAPI?.selectDirectory?.();
+  //   if (directory) {
+  //     form.setFieldValue("logDir", directory);
+  //   }
+  // };
 
   return (
     <div className={stl.container}>
@@ -135,14 +115,14 @@ const Settings = () => {
             >
               <Input allowClear placeholder="请输入连接码" />
             </Form.Item>
-            <Form.Item name="logDir" label="日志目录">
+            {/* <Form.Item name="logDir" label="日志目录">
               <Input
                 allowClear
                 placeholder="请选择日志目录"
                 suffix={<FolderOpenOutlined onClick={handleSelectDirectory} />}
               />
-            </Form.Item>
-            <Form.Item name="logLevel" label="日志级别">
+            </Form.Item> */}
+            {/* <Form.Item name="logLevel" label="日志级别">
               <Select
                 allowClear
                 placeholder="请选择日志级别"
@@ -153,7 +133,7 @@ const Settings = () => {
                   { label: "Error", value: "error" },
                 ]}
               />
-            </Form.Item>
+            </Form.Item> */}
             <Form.Item
               name="browserHeaded"
               valuePropName="checked"

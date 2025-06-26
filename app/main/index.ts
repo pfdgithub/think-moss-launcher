@@ -1,8 +1,6 @@
-import { app, BrowserWindow, dialog, Menu } from "electron";
+import { app, BrowserWindow, dialog } from "electron";
 import started from "electron-squirrel-startup";
 import Windows from "./Windows.js";
-
-Menu.setApplicationMenu(null);
 
 const windows = new Windows();
 

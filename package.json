@@ -1,8 +1,8 @@
 {
   "name": "think-moss-launcher",
-  "productName": "ThinkMoss Launcher",
+  "productName": "ThinkMoss",
   "version": "0.1.0",
-  "description": "ThinkMoss 启动器",
+  "description": "ThinkMoss",
   "main": "dist/app/main/index.js",
   "scripts": {
     "serve": "concurrently -n web,app,electron -c auto --kill-others-on-fail \"npm run serve:web\" \"npm run serve:app\" \"npm run serve:electron\"",

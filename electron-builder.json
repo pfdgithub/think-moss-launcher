@@ -1,6 +1,6 @@
 {
   "appId": "com.think.moss.launcher",
-  "productName": "ThinkMoss Launcher",
+  "productName": "ThinkMoss",
   "directories": {
     "output": "out"
   },

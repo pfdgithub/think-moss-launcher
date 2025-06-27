@@ -73,7 +73,7 @@ const Control = () => {
     <div className={stl.container}>
       <div className={stl.header}>
         <Title level={3} className={stl.title}>
-          ThinkMoss Launcher
+          ThinkMoss
         </Title>
         <Space>
           <Button

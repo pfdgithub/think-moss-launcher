@@ -55,7 +55,7 @@ class Windows {
       mainWindow?.show();
     });
 
-    mainWindow.on("closed", () => {
+    mainWindow.once("closed", () => {
       this.mainWindow = undefined;
     });
 
@@ -197,7 +197,7 @@ class Windows {
         // 延迟重启
         setImmediate(() => {
           app.relaunch();
-          app.exit(0);
+          app.quit();
         });
 
         return { success: true };

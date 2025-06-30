@@ -64,11 +64,8 @@ class Windows {
     if (isProd) {
       mainWindow.loadFile(rendererFilePath);
     } else {
-      mainWindow.loadURL(rendererDevUrl);
-    }
-
-    if (!isProd) {
       mainWindow.webContents.openDevTools();
+      mainWindow.loadURL(rendererDevUrl);
     }
   }
 

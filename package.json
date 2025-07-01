@@ -21,7 +21,7 @@
     "email": "service@thinkmoss.com"
   },
   "dependencies": {
-    "@think/moss-browser": "file:think-moss-browser-0.1.0.tgz",
+    "@think/moss-browser": "file:think-moss-browser-0.1.1.tgz",
     "electron-squirrel-startup": "^1.0.1"
   },
   "devDependencies": {
@@ -37,7 +37,7 @@
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^4.6.0",
-    "antd": "^5.26.2",
+    "antd": "^5.26.3",
     "classnames": "^2.5.1",
     "concurrently": "^9.2.0",
     "cross-env": "^7.0.3",
@@ -60,7 +60,7 @@
     "react-router": "^7.6.3",
     "react-router-dom": "^7.6.3",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.35.0",
+    "typescript-eslint": "^8.35.1",
     "vite": "^7.0.0",
     "vite-plugin-checker": "^0.9.3",
     "wait-on": "^8.0.3"

@@ -75,36 +75,41 @@ class Browser {
 
     this.logs.info("启动进程");
 
-    // 命令行地址
-    const mainPath = require.resolve(appName);
-    const pkgPath = mainPath.substring(
-      0,
-      mainPath.lastIndexOf(appName) + appName.length,
-    );
-    const cliPath = path.join(pkgPath, appCliPath);
-
-    // 命令行参数
-    const args: string[] = [];
-    if (apiBase) {
-      args.push("--api-base", apiBase);
-    }
-    if (connectCode) {
-      args.push("--connect-code", connectCode);
-    }
-    if (logDir) {
-      args.push("--log-dir", logDir);
-    }
-    if (logLevel) {
-      args.push("--log-level", logLevel);
-    }
-    if (browserHeaded) {
-      args.push("--browser-headed");
-    }
-
-    // this.logs.debug(`${cliPath} ${args.join(" ")}`);
-
     return new Promise<void>((resolve, reject) => {
       try {
+        // #region 命令行参数
+
+        // 命令行地址
+        const mainPath = require.resolve(appName);
+        const namePath = path.normalize(appName);
+        const pkgPath = mainPath.substring(
+          0,
+          mainPath.lastIndexOf(namePath) + namePath.length,
+        );
+        const cliPath = path.join(pkgPath, appCliPath);
+
+        // 命令行参数
+        const args: string[] = [];
+        if (apiBase) {
+          args.push("--api-base", apiBase);
+        }
+        if (connectCode) {
+          args.push("--connect-code", connectCode);
+        }
+        if (logDir) {
+          args.push("--log-dir", logDir);
+        }
+        if (logLevel) {
+          args.push("--log-level", logLevel);
+        }
+        if (browserHeaded) {
+          args.push("--browser-headed");
+        }
+
+        // this.logs.debug(`${cliPath} ${args.join(" ")}`);
+
+        // #endregion
+
         // 启动进程
         this.mossProcess = childProcess.fork(cliPath, args, {
           env: {
@@ -112,6 +117,8 @@ class Browser {
             PLAYWRIGHT_BROWSERS_PATH: playwrightBrowsersPath,
           },
         });
+
+        // #region 监听事件
 
         // 监听 IPC 消息
         ipc.listenMessage(
@@ -141,29 +148,42 @@ class Browser {
           }
         });
 
-        // 监听退出
-        this.mossProcess.on("exit", (code, signal) => {
-          this.logs.warn(`进程退出: ${code} ${signal}`);
-          this.cleanup();
-        });
-
-        // 监听错误
-        this.mossProcess.on("error", (error) => {
-          this.logs.error(`进程错误: ${error.message}`);
-          this.cleanup();
-          reject(error);
-        });
-
         // 延迟检查
-        setTimeout(() => {
+        const timer = setTimeout(() => {
           if (this.mossProcess && !this.mossProcess.killed) {
             this.setRunning(true);
             resolve();
           } else {
-            this.setRunning(false);
-            reject(new Error("启动进程失败"));
+            this.cleanup();
+            const { exitCode, signalCode } = this.mossProcess || {};
+            reject(new Error(`启动进程失败: ${exitCode} ${signalCode}`));
           }
         }, 2000);
+
+        // 监听退出
+        this.mossProcess.on("exit", (code, signal) => {
+          clearTimeout(timer);
+          this.cleanup();
+
+          const msg = `进程退出: ${code} ${signal}`;
+          this.logs.warn(msg);
+
+          if (code !== 0 || signal) {
+            reject(new Error(msg));
+          }
+        });
+
+        // 监听错误
+        this.mossProcess.on("error", (error) => {
+          clearTimeout(timer);
+          this.cleanup();
+
+          const msg = `进程错误: ${error.message}`;
+          this.logs.error(msg);
+          reject(new Error(msg));
+        });
+
+        // #endregion
       } catch (error: any) {
         this.logs.error(`启动进程失败: ${error?.message}`);
         reject(error);

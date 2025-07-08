@@ -22,12 +22,6 @@ const Control = () => {
     // 获取初始应用状态
     window.electronAPI?.getAppStatus?.().then(setAppStatus);
 
-    // 监听应用消息
-    const offAppMessage = window.electronAPI?.onAppMessage?.((msg) => {
-      const { level, duration, content } = msg;
-      (message as any)[level || "info"]?.(content, duration);
-    });
-
     // 监听浏览器状态变更
     const offBrowserChange = window.electronAPI?.onBrowserChange?.(
       (running) => {
@@ -36,7 +30,6 @@ const Control = () => {
     );
 
     return () => {
-      offAppMessage?.();
       offBrowserChange?.();
     };
   }, [message]);

@@ -1,22 +1,13 @@
 import childProcess, { ChildProcess } from "child_process";
-import { appCliName } from "@think/moss-browser";
+import path from "path";
+import { appCliPath, appName, ipc } from "@think/moss-browser";
 import { Message, MossConfig } from "../types";
 import Logs from "./Logs";
 import { playwrightBrowsersPath } from "./utils/config";
-import {
-  connectTo,
-  EventType,
-  IPCClient,
-  LogParams,
-  NoticeParams,
-} from "./utils/ipc";
 
 class Browser {
   /** 日志 */
   private logs: Logs;
-
-  /** IPC 客户端 */
-  private ipcClient: IPCClient | undefined;
 
   /** moss 进程 */
   private mossProcess: ChildProcess | undefined;
@@ -57,28 +48,24 @@ class Browser {
 
   /** 扫尾清理 */
   private cleanup() {
-    this.ipcClient?.off(EventType.log, this.handleIPCLog);
-    this.ipcClient?.off(EventType.notice, this.handleIPCNotice);
-
-    this.ipcClient = undefined;
     this.mossProcess = undefined;
     this.setRunning(false);
   }
 
-  private handleIPCLog = (data: LogParams) => {
-    this.logs.addMessage(data);
+  /** 处理 IPC 日志 */
+  private handleIpcLogger = (payload: ipc.LoggerPayload) => {
+    this.logs.addMessage(payload);
   };
 
-  private handleIPCNotice = (data: NoticeParams) => {
-    const { type, payload } = data;
+  /** 处理 IPC 操作 */
+  private handleIpcAction = (payload: ipc.ActionPayload) => {
+    const { name, result } = payload || {};
 
-    if (type === "register-result") {
-      if (payload?.success === false) {
-        this.onAppMessage?.({
-          level: "error",
-          content: payload?.message || "注册失败",
-        });
-      }
+    if (result?.success === false) {
+      this.onAppMessage?.({
+        level: "error",
+        content: result?.message || `${name} 操作失败`,
+      });
     }
   };
 
@@ -89,7 +76,12 @@ class Browser {
     this.logs.info("启动进程");
 
     // 命令行地址
-    const cliPath = require.resolve("@think/moss-browser/dist/cli.js");
+    const mainPath = require.resolve(appName);
+    const pkgPath = mainPath.substring(
+      0,
+      mainPath.lastIndexOf(appName) + appName.length,
+    );
+    const cliPath = path.join(pkgPath, appCliPath);
 
     // 命令行参数
     const args: string[] = [];
@@ -121,12 +113,17 @@ class Browser {
           },
         });
 
-        connectTo(appCliName, (client) => {
-          this.ipcClient = client;
-
-          client.on(EventType.log, this.handleIPCLog);
-          client.on(EventType.notice, this.handleIPCNotice);
-        });
+        // 监听 IPC 消息
+        ipc.listenMessage(
+          ipc.MessageType.logger,
+          this.handleIpcLogger,
+          this.mossProcess,
+        );
+        ipc.listenMessage(
+          ipc.MessageType.action,
+          this.handleIpcAction,
+          this.mossProcess,
+        );
 
         // 监听标准输出
         this.mossProcess.stdout?.on("data", (data) => {

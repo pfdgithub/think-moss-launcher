@@ -1,4 +1,4 @@
-import { Button, Form, Input, message, Modal, Switch, Typography } from "antd";
+import { App, Button, Form, Input, Modal, Switch, Typography } from "antd";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeftOutlined, SaveOutlined } from "@ant-design/icons";
@@ -8,6 +8,7 @@ import stl from "./index.module.less";
 const { Title } = Typography;
 
 const Settings = () => {
+  const { message } = App.useApp();
   const navigate = useNavigate();
   const [form] = Form.useForm<MossConfig>();
   const [loading, setLoading] = useState(false);

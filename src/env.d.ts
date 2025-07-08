@@ -46,6 +46,8 @@ declare interface Window {
     /** 选择目录 */
     selectDirectory?: () => Promise<string | undefined>;
 
+    /** 监听应用消息 */
+    onAppMessage?: (callback: (msg: Message) => void) => () => void;
     /** 监听日志变更 */
     onLogsChange?: (callback: (log: string) => void) => () => void;
     /** 监听配置变更 */

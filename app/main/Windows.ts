@@ -1,14 +1,14 @@
 import { app, BrowserWindow, dialog, ipcMain } from "electron";
-import { MossConfig } from "../types.js";
-import Browser from "./Browser.js";
+import { Message, MossConfig } from "../types";
+import Browser from "./Browser";
+import Logs from "./Logs";
+import Settings from "./Settings";
 import {
   isProd,
   preloadFilePath,
   rendererDevUrl,
   rendererFilePath,
-} from "./config.js";
-import Logs from "./Logs.js";
-import Settings from "./Settings.js";
+} from "./utils/config";
 
 class Windows {
   /** 日志 */
@@ -30,6 +30,7 @@ class Windows {
     });
     this.browser = new Browser(this.logs, {
       onChange: this.onBrowserChange,
+      onAppMessage: this.onAppMessage,
     });
 
     this.handleIPC();
@@ -97,6 +98,11 @@ class Windows {
 
     // 关闭窗口
     this.mainWindow?.close();
+  };
+
+  /** 监听应用消息 */
+  private onAppMessage = (msg: Message) => {
+    this.mainWindow?.webContents.send("app-message", msg);
   };
 
   /** 监听日志变更 */

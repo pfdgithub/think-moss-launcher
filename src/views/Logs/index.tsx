@@ -1,4 +1,4 @@
-import { Button, message, Modal, Typography } from "antd";
+import { App, Button, Modal, Typography } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeftOutlined, ClearOutlined } from "@ant-design/icons";
@@ -7,6 +7,7 @@ import stl from "./index.module.less";
 const { Title } = Typography;
 
 const Logs = () => {
+  const { message } = App.useApp();
   const navigate = useNavigate();
   const [logs, setLogs] = useState<string[]>([]);
   const logsEndRef = useRef<HTMLDivElement>(null);

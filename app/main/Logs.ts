@@ -1,7 +1,14 @@
+import { toLocalISOString } from "./utils/utils";
+
 export type MessageInfo = {
+  [key: string]: any;
+  /** 日志级别 */
   level?: string;
+  /** 日志消息 */
   message?: string;
+  /** 日志时间戳 */
   timestamp?: string;
+  /** 附加标签 */
   label?: string;
 };
 
@@ -68,7 +75,7 @@ class Logs {
       message,
       label: "launcher",
       level: "debug",
-      timestamp: new Date().toISOString(),
+      timestamp: toLocalISOString(),
     });
   }
 
@@ -78,7 +85,7 @@ class Logs {
       message,
       label: "launcher",
       level: "info",
-      timestamp: new Date().toISOString(),
+      timestamp: toLocalISOString(),
     });
   }
 
@@ -88,7 +95,7 @@ class Logs {
       message,
       label: "launcher",
       level: "warn",
-      timestamp: new Date().toISOString(),
+      timestamp: toLocalISOString(),
     });
   }
 
@@ -98,7 +105,7 @@ class Logs {
       message,
       label: "launcher",
       level: "error",
-      timestamp: new Date().toISOString(),
+      timestamp: toLocalISOString(),
     });
   }
 }

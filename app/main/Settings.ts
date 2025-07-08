@@ -1,9 +1,9 @@
 import { app } from "electron";
 import fs from "fs";
 import path from "path";
-import { MossConfig } from "../types.js";
-import Logs from "./Logs.js";
-import { defaultMossConfig } from "./config.js";
+import { MossConfig } from "../types";
+import Logs from "./Logs";
+import { defaultMossConfig } from "./utils/config";
 
 class Settings {
   /** 日志 */

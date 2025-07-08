@@ -1,11 +1,22 @@
 import childProcess, { ChildProcess } from "child_process";
-import { MossConfig } from "../types.js";
-import { playwrightBrowsersPath } from "./config.js";
-import Logs from "./Logs.js";
+import { appCliName } from "@think/moss-browser";
+import { Message, MossConfig } from "../types";
+import Logs from "./Logs";
+import { playwrightBrowsersPath } from "./utils/config";
+import {
+  connectTo,
+  EventType,
+  IPCClient,
+  LogParams,
+  NoticeParams,
+} from "./utils/ipc";
 
 class Browser {
   /** 日志 */
   private logs: Logs;
+
+  /** IPC 客户端 */
+  private ipcClient: IPCClient | undefined;
 
   /** moss 进程 */
   private mossProcess: ChildProcess | undefined;
@@ -16,14 +27,19 @@ class Browser {
   /** 监听状态变更 */
   private onChange?: (running: boolean) => void;
 
+  /** 监听应用消息 */
+  private onAppMessage?: (msg: Message) => void;
+
   constructor(
     logs: Logs,
     options?: {
       onChange?: (running: boolean) => void;
+      onAppMessage?: (msg: Message) => void;
     },
   ) {
     this.logs = logs;
     this.onChange = options?.onChange;
+    this.onAppMessage = options?.onAppMessage;
   }
 
   /** 获取运行状态 */
@@ -38,6 +54,33 @@ class Browser {
       this.onChange?.(running);
     }
   }
+
+  /** 扫尾清理 */
+  private cleanup() {
+    this.ipcClient?.off(EventType.log, this.handleIPCLog);
+    this.ipcClient?.off(EventType.notice, this.handleIPCNotice);
+
+    this.ipcClient = undefined;
+    this.mossProcess = undefined;
+    this.setRunning(false);
+  }
+
+  private handleIPCLog = (data: LogParams) => {
+    this.logs.addMessage(data);
+  };
+
+  private handleIPCNotice = (data: NoticeParams) => {
+    const { type, payload } = data;
+
+    if (type === "register-result") {
+      if (payload?.success === false) {
+        this.onAppMessage?.({
+          level: "error",
+          content: payload?.message || "注册失败",
+        });
+      }
+    }
+  };
 
   /** 启动浏览器 */
   public async startBrowser(config: MossConfig) {
@@ -78,12 +121,11 @@ class Browser {
           },
         });
 
-        // 监听定制消息
-        this.mossProcess.on("message", (msg) => {
-          const { type, payload } = (msg || {}) as any;
-          if (type === "winston-IPCTransport") {
-            this.logs.addMessage(payload);
-          }
+        connectTo(appCliName, (client) => {
+          this.ipcClient = client;
+
+          client.on(EventType.log, this.handleIPCLog);
+          client.on(EventType.notice, this.handleIPCNotice);
         });
 
         // 监听标准输出
@@ -105,15 +147,13 @@ class Browser {
         // 监听退出
         this.mossProcess.on("exit", (code, signal) => {
           this.logs.warn(`进程退出: ${code} ${signal}`);
-          this.mossProcess = undefined;
-          this.setRunning(false);
+          this.cleanup();
         });
 
         // 监听错误
         this.mossProcess.on("error", (error) => {
           this.logs.error(`进程错误: ${error.message}`);
-          this.mossProcess = undefined;
-          this.setRunning(false);
+          this.cleanup();
           reject(error);
         });
 
@@ -148,9 +188,7 @@ class Browser {
 
       this.mossProcess.on("exit", () => {
         clearTimeout(timer);
-
-        this.mossProcess = undefined;
-        this.setRunning(false);
+        this.cleanup();
         resolve();
       });
 

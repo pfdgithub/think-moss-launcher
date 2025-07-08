@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
-import { AppStatus, InvokeResponse, MossConfig } from "../types.js";
+import { AppStatus, InvokeResponse, Message, MossConfig } from "../types";
 
 contextBridge.exposeInMainWorld("electronAPI", {
   /** 获取应用状态 */
@@ -29,6 +29,18 @@ contextBridge.exposeInMainWorld("electronAPI", {
   /** 选择目录 */
   selectDirectory: (): Promise<string | undefined> =>
     ipcRenderer.invoke("select-directory"),
+
+  /** 监听应用消息 */
+  onAppMessage: (callback: (msg: Message) => void) => {
+    const listener = (event: IpcRendererEvent, msg: Message) => callback(msg);
+
+    ipcRenderer.on("app-message", listener);
+
+    // 清理函数
+    return () => {
+      ipcRenderer.off("app-message", listener);
+    };
+  },
 
   /** 监听日志变更 */
   onLogsChange: (callback: (log: string) => void) => {

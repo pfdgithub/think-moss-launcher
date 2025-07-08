@@ -1,3 +1,12 @@
+export type Message = {
+  /** 消息级别 */
+  level?: "info" | "warning" | "error" | "success" | "loading";
+  /** 延时关闭(秒) */
+  duration?: number;
+  /** 消息内容 */
+  content?: string;
+};
+
 export type MossConfig = {
   /** 接口路径 */
   apiBase?: string;

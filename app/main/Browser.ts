@@ -148,24 +148,13 @@ class Browser {
           }
         });
 
-        // 延迟检查
-        const timer = setTimeout(() => {
-          if (this.mossProcess && !this.mossProcess.killed) {
-            this.setRunning(true);
-            resolve();
-          } else {
-            this.cleanup();
-            const { exitCode, signalCode } = this.mossProcess || {};
-            reject(new Error(`启动进程失败: ${exitCode} ${signalCode}`));
-          }
-        }, 2000);
-
         // 监听退出
         this.mossProcess.on("exit", (code, signal) => {
-          clearTimeout(timer);
           this.cleanup();
 
-          const msg = `进程退出: ${code} ${signal}`;
+          const msg =
+            "进程退出" +
+            (code || signal ? `: ${code || ""} ${signal || ""}` : "");
           this.logs.warn(msg);
 
           if (code !== 0 || signal) {
@@ -175,13 +164,32 @@ class Browser {
 
         // 监听错误
         this.mossProcess.on("error", (error) => {
-          clearTimeout(timer);
           this.cleanup();
 
           const msg = `进程错误: ${error.message}`;
           this.logs.error(msg);
           reject(new Error(msg));
         });
+
+        // 延迟检查
+        setTimeout(() => {
+          if (this.mossProcess && !this.mossProcess.killed) {
+            this.setRunning(true);
+
+            resolve();
+          } else {
+            this.cleanup();
+
+            const { exitCode, signalCode } = this.mossProcess || {};
+            const msg =
+              "检查失败" +
+              (exitCode || signalCode
+                ? `: ${exitCode || ""} ${signalCode || ""}`
+                : "");
+            this.logs.error(msg);
+            reject(new Error(msg));
+          }
+        }, 2000);
 
         // #endregion
       } catch (error: any) {

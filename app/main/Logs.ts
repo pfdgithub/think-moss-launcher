@@ -61,9 +61,9 @@ class Logs {
     const levelStr = `[${level}]: `;
     const labelStr = label ? `[${label}] ` : "";
     const messageStr = message || "";
-    const restStr = Object.keys(rest).length
-      ? `\n${JSON.stringify(rest, null, 2)}`
-      : "";
+
+    const jsonStr = JSON.stringify(rest, null, 2);
+    const restStr = jsonStr && jsonStr !== "{}" ? `\n${jsonStr}` : "";
 
     const log = timestampStr + levelStr + labelStr + messageStr + restStr;
     this.addLog(log);

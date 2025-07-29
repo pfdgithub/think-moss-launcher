@@ -9,7 +9,6 @@ ThinkMoss 启动器
 因含有原生平台依赖(playwright-core/sharp 等)，打包时请在对应平台架构的设备中编译，不建议进行交叉编译。
 
 因 Electron 对 [ES Modules](https://www.electronjs.org/docs/latest/tutorial/esm) 的支持还不太好，目前 TypeScript 配置需使用 CommonJS 规范。
-123
 
 ## 常用命令
 

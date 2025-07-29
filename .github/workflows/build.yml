@@ -30,7 +30,7 @@ jobs:
           node-version: "lts/*"
           cache: "npm"
 
-      - name: Set npm registry
+      - name: Set npm registry (macOS)
         run: echo -e "@think:registry=https://registry.thinkmoss.com/repository/npm-hosted/\n//registry.thinkmoss.com/repository/npm-hosted/:_authToken=NpmToken.e9591b41-bbe8-3722-aaf2-baa478151db6" > ~/.npmrc
 
       - name: Show npm config
@@ -64,7 +64,7 @@ jobs:
           node-version: "lts/*"
           cache: "npm"
 
-      - name: Set npm registry
+      - name: Set npm registry (macOS)
         run: echo -e "@think:registry=https://registry.thinkmoss.com/repository/npm-hosted/\n//registry.thinkmoss.com/repository/npm-hosted/:_authToken=NpmToken.e9591b41-bbe8-3722-aaf2-baa478151db6" > ~/.npmrc
 
       - name: Show npm config
@@ -98,8 +98,11 @@ jobs:
           node-version: "lts/*"
           cache: "npm"
 
-      - name: Set npm registry
-        run: echo -e "@think:registry=https://registry.thinkmoss.com/repository/npm-hosted/\n//registry.thinkmoss.com/repository/npm-hosted/:_authToken=NpmToken.e9591b41-bbe8-3722-aaf2-baa478151db6" > ~/.npmrc
+      - name: Set npm registry (Windows)
+        run: |
+          echo "@think:registry=https://registry.thinkmoss.com/repository/npm-hosted/" > ~/.npmrc
+          echo "//registry.thinkmoss.com/repository/npm-hosted/:_authToken=NpmToken.e9591b41-bbe8-3722-aaf2-baa478151db6" >> ~/.npmrc
+        shell: bash
 
       - name: Show npm config
         run: cat ~/.npmrc

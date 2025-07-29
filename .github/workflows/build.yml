@@ -4,12 +4,12 @@ on:
   workflow_dispatch:
     inputs:
       build_mac:
-        description: 'Build macOS version'
+        description: "Build macOS version"
         required: false
         default: true
         type: boolean
       build_windows:
-        description: 'Build Windows version'
+        description: "Build Windows version"
         required: false
         default: true
         type: boolean
@@ -18,24 +18,30 @@ jobs:
   # macOS x64 (Intel)
   build-mac-x64:
     if: ${{ github.event.inputs.build_mac != 'false' }}
-    runs-on: macos-13  # Intel-based runner
-    
+    runs-on: macos-13 # Intel-based runner
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 'lts/*'
-          cache: 'npm'
-          
+          node-version: "lts/*"
+          cache: "npm"
+
+      - name: Set npm registry
+        run: echo -e "@think:registry=https://registry.thinkmoss.com/repository/npm-hosted/\n//registry.thinkmoss.com/repository/npm-hosted/:_authToken=NpmToken.e9591b41-bbe8-3722-aaf2-baa478151db6" > ~/.npmrc
+
+      - name: Show npm config
+        run: cat ~/.npmrc
+
       - name: Install dependencies
         run: npm ci
-        
+
       - name: Build macOS x64
         run: npm run build
-          
+
       - name: Upload macOS x64 artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -46,21 +52,27 @@ jobs:
   # macOS arm64 (Apple Silicon)
   build-mac-arm64:
     if: ${{ github.event.inputs.build_mac != 'false' }}
-    runs-on: macos-latest  # Apple Silicon runner
-    
+    runs-on: macos-latest # Apple Silicon runner
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 'lts/*'
-          cache: 'npm'
-          
+          node-version: "lts/*"
+          cache: "npm"
+
+      - name: Set npm registry
+        run: echo -e "@think:registry=https://registry.thinkmoss.com/repository/npm-hosted/\n//registry.thinkmoss.com/repository/npm-hosted/:_authToken=NpmToken.e9591b41-bbe8-3722-aaf2-baa478151db6" > ~/.npmrc
+
+      - name: Show npm config
+        run: cat ~/.npmrc
+
       - name: Install dependencies
         run: npm ci
-        
+
       - name: Build macOS arm64
         run: npm run build
 
@@ -75,23 +87,29 @@ jobs:
   build-windows-x64:
     if: ${{ github.event.inputs.build_windows != 'false' }}
     runs-on: windows-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 'lts/*'
-          cache: 'npm'
-          
+          node-version: "lts/*"
+          cache: "npm"
+
+      - name: Set npm registry
+        run: echo -e "@think:registry=https://registry.thinkmoss.com/repository/npm-hosted/\n//registry.thinkmoss.com/repository/npm-hosted/:_authToken=NpmToken.e9591b41-bbe8-3722-aaf2-baa478151db6" > ~/.npmrc
+
+      - name: Show npm config
+        run: cat ~/.npmrc
+
       - name: Install dependencies
         run: npm ci
-        
+
       - name: Build Windows x64
         run: npm run build
-          
+
       - name: Upload Windows x64 artifacts
         uses: actions/upload-artifact@v4
         with:

@@ -21,7 +21,7 @@
     "email": "service@thinkmoss.com"
   },
   "dependencies": {
-    "@think/moss-browser": "file:think-moss-browser-0.1.4.tgz",
+    "@think/moss-browser": "^0.1.5",
     "electron-squirrel-startup": "^1.0.1"
   },
   "devDependencies": {

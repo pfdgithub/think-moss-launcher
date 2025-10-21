@@ -4,7 +4,7 @@ ThinkMoss 启动器
 
 ## 注意事项
 
-为了使用 GitHub CI 的免费额度，将 `@think/moss-browser` 二方包作为资源文件包含在本仓库中。
+~~为了使用 GitHub CI 的免费额度，将 `@think/moss-browser` 二方包作为资源文件包含在本仓库中。~~
 
 因含有原生平台依赖(playwright-core/sharp 等)，打包时请在对应平台架构的设备中编译，不建议进行交叉编译。
 

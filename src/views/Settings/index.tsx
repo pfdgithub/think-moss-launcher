@@ -1,4 +1,13 @@
-import { App, Button, Form, Input, Modal, Switch, Typography } from "antd";
+import {
+  App,
+  Button,
+  Form,
+  Input,
+  Modal,
+  Select,
+  Switch,
+  Typography,
+} from "antd";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeftOutlined, SaveOutlined } from "@ant-design/icons";
@@ -123,7 +132,7 @@ const Settings = () => {
                 suffix={<FolderOpenOutlined onClick={handleSelectDirectory} />}
               />
             </Form.Item> */}
-            {/* <Form.Item name="logLevel" label="日志级别">
+            <Form.Item name="logLevel" label="日志级别">
               <Select
                 allowClear
                 placeholder="请选择日志级别"
@@ -134,7 +143,7 @@ const Settings = () => {
                   { label: "Error", value: "error" },
                 ]}
               />
-            </Form.Item> */}
+            </Form.Item>
             <Form.Item
               name="browserHeaded"
               valuePropName="checked"
